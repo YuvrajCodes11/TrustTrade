@@ -227,8 +227,8 @@ th{ font-weight:600; color:var(--ink-soft); font-size:11.5px; text-transform:upp
 /* ============ CONFIGURATION & NETWORKING ============ */
 // PRODUCTION CONFIGURATION: Edit API_BASE_URL to point to your Railway backend URL before deploying to Vercel/Netlify.
 // Example: const API_BASE_URL = 'https://trusttrade-backend-production.up.railway.app';
-const API_BASE_URL = window.API_BASE_URL || 'http://localhost:4000';
-
+const API_BASE_URL = window.API_BASE_URL || 'trusttrade-production.up.railway.app';
+  
 document.addEventListener('DOMContentLoaded', () => {
   const label = document.getElementById('apiBaseUrlLabel');
   if (label) label.textContent = API_BASE_URL;
