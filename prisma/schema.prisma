@@ -1,0 +1,254 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum KycStatus {
+  NONE
+  PENDING
+  VERIFIED
+  REJECTED
+}
+
+enum Category {
+  ELECTRONICS
+  FURNITURE
+  VEHICLES
+  APPLIANCES
+  OTHER
+}
+
+enum Condition {
+  NEW
+  USED_LIKE_NEW
+  USED_GOOD
+  FOR_PARTS
+}
+
+enum ListingStatus {
+  ACTIVE
+  SOLD
+  REMOVED
+}
+
+enum TransactionStatus {
+  NONE
+  ACTIVE
+  COMPLETED
+  DISPUTED
+  REFUNDED
+}
+
+enum DisputeStatus {
+  OPEN
+  INVESTIGATING
+  RESOLVED_BUYER
+  RESOLVED_SELLER
+}
+
+enum ReportStatus {
+  OPEN
+  REVIEWED
+  ACTIONED
+}
+
+model User {
+  id              String         @id @default(uuid())
+  name            String
+  phone           String         @unique
+  phoneVerifiedAt DateTime?
+  kycStatus       KycStatus      @default(NONE)
+  kycProviderRef  String?
+  banned          Boolean        @default(false)
+  bannedReason    String?
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  listings        Listing[]
+  buyerConvos     Conversation[] @relation("BuyerConversations")
+  sellerConvos    Conversation[] @relation("SellerConversations")
+  sentMessages    Message[]
+  buyerTxs        Transaction[]  @relation("BuyerTransactions")
+  sellerTxs       Transaction[]  @relation("SellerTransactions")
+  disputesRaised  Dispute[]      @relation("DisputesRaised")
+  disputesResolved Dispute[]     @relation("DisputesResolved")
+  givenReviews    Review[]       @relation("GivenReviews")
+  receivedReviews Review[]       @relation("ReceivedReviews")
+  adminRoles      AdminRole[]    @relation("UserAdminRoles")
+  grantedRoles    AdminRole[]    @relation("GrantedAdminRoles")
+  auditLogs       AuditLog[]     @relation("ActorAuditLogs")
+  reportsMade     Report[]       @relation("ReportsMade")
+  reportsReceived Report[]       @relation("ReportsReceived")
+  blocksInitiated Block[]        @relation("BlocksInitiated")
+  blocksReceived  Block[]        @relation("BlocksReceived")
+
+  @@index([phone])
+}
+
+model Listing {
+  id                 String        @id @default(uuid())
+  sellerId           String
+  seller             User          @relation(fields: [sellerId], references: [id], onDelete: Cascade)
+  title              String
+  category           Category
+  priceInr           Int
+  condition          Condition
+  description        String
+  photoUrls          String[]
+  protectRecommended Boolean       @default(false)
+  status             ListingStatus @default(ACTIVE)
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @updatedAt
+
+  conversations      Conversation[]
+  transactions       Transaction[]
+
+  @@index([sellerId, status])
+}
+
+model Conversation {
+  id        String   @id @default(uuid())
+  listingId String
+  listing   Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  buyerId   String
+  buyer     User     @relation("BuyerConversations", fields: [buyerId], references: [id], onDelete: Cascade)
+  sellerId  String
+  seller    User     @relation("SellerConversations", fields: [sellerId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  messages  Message[]
+  reports   Report[]
+
+  @@unique([listingId, buyerId])
+  @@index([listingId, buyerId])
+}
+
+model Message {
+  id             String       @id @default(uuid())
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  senderId       String
+  sender         User         @relation(fields: [senderId], references: [id], onDelete: Cascade)
+  content        String
+  flagged        Boolean      @default(false)
+  flagReason     String?
+  createdAt      DateTime     @default(now())
+
+  @@index([conversationId])
+}
+
+model Transaction {
+  id                 String            @id @default(uuid())
+  listingId          String
+  listing            Listing           @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  buyerId            String
+  buyer              User              @relation("BuyerTransactions", fields: [buyerId], references: [id], onDelete: Cascade)
+  sellerId           String
+  seller             User              @relation("SellerTransactions", fields: [sellerId], references: [id], onDelete: Cascade)
+  status             TransactionStatus @default(ACTIVE)
+  paymentProviderRef String?
+  amountInr          Int
+  createdAt          DateTime          @default(now())
+  completedAt        DateTime?
+
+  disputes           Dispute[]
+  reviews            Review[]
+
+  @@index([listingId, buyerId])
+}
+
+model Dispute {
+  id              String        @id @default(uuid())
+  transactionId   String
+  transaction     Transaction   @relation(fields: [transactionId], references: [id], onDelete: Cascade)
+  raisedById      String
+  raisedBy        User          @relation("DisputesRaised", fields: [raisedById], references: [id], onDelete: Cascade)
+  reason          String
+  status          DisputeStatus @default(OPEN)
+  resolutionNotes String?
+  resolvedById    String?
+  resolvedBy      User?         @relation("DisputesResolved", fields: [resolvedById], references: [id])
+  createdAt       DateTime      @default(now())
+  resolvedAt      DateTime?
+
+  @@index([transactionId])
+}
+
+model Review {
+  id            String      @id @default(uuid())
+  transactionId String
+  transaction   Transaction @relation(fields: [transactionId], references: [id], onDelete: Cascade)
+  reviewerId    String
+  reviewer      User        @relation("GivenReviews", fields: [reviewerId], references: [id], onDelete: Cascade)
+  revieweeId    String
+  reviewee      User        @relation("ReceivedReviews", fields: [revieweeId], references: [id], onDelete: Cascade)
+  rating        Int
+  comment       String?
+  createdAt     DateTime    @default(now())
+
+  @@unique([transactionId, reviewerId])
+  @@index([transactionId, reviewerId])
+}
+
+model AdminRole {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation("UserAdminRoles", fields: [userId], references: [id], onDelete: Cascade)
+  grantedAt DateTime @default(now())
+  grantedBy String?
+  grantor   User?    @relation("GrantedAdminRoles", fields: [grantedBy], references: [id])
+
+  @@unique([userId])
+}
+
+model AuditLog {
+  id         String   @id @default(uuid())
+  actorId    String?
+  actor      User?    @relation("ActorAuditLogs", fields: [actorId], references: [id])
+  action     String
+  targetType String
+  targetId   String
+  metadata   Json?
+  createdAt  DateTime @default(now())
+}
+
+model ScamRule {
+  id        String   @id @default(uuid())
+  pattern   String
+  reason    String
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Report {
+  id                    String        @id @default(uuid())
+  reporterId            String
+  reporter              User          @relation("ReportsMade", fields: [reporterId], references: [id], onDelete: Cascade)
+  reportedUserId        String
+  reportedUser          User          @relation("ReportsReceived", fields: [reportedUserId], references: [id], onDelete: Cascade)
+  reason                String
+  relatedConversationId String?
+  relatedConversation   Conversation? @relation(fields: [relatedConversationId], references: [id], onDelete: SetNull)
+  status                ReportStatus  @default(OPEN)
+  createdAt             DateTime      @default(now())
+
+  @@index([reporterId])
+  @@index([reportedUserId])
+}
+
+model Block {
+  id        String   @id @default(uuid())
+  blockerId String
+  blocker   User     @relation("BlocksInitiated", fields: [blockerId], references: [id], onDelete: Cascade)
+  blockedId String
+  blocked   User     @relation("BlocksReceived", fields: [blockedId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([blockerId, blockedId])
+  @@index([blockerId, blockedId])
+}

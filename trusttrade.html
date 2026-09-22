@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>TrustTrade — Verified Resale, India</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600;8..60,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --paper:#F2F3EF; --paper-dark:#E9EAE4; --ink:#161C1A; --ink-soft:#4B534F;
+  --seal:#0F3D3A; --seal-light:#175C56; --gold:#B8912E; --gold-soft:#EFE3C0;
+  --warn:#A83A2C; --warn-soft:#F4DEDA; --ok:#2C6E4F; --ok-soft:#DCEBE1;
+  --line: rgba(22,28,26,0.14); --surface:#FBFAF6; --radius:3px;
+  --serif:'Source Serif 4',Georgia,serif; --sans:'IBM Plex Sans',-apple-system,sans-serif; --mono:'IBM Plex Mono',monospace;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px); box-sizing:border-box;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper:#12160F; --paper-dark:#191D14; --ink:#EEEFE9; --ink-soft:#A9AF9E;
+    --seal:#3E8C7E; --seal-light:#59A798; --gold:#D8B85A; --gold-soft:#33301C;
+    --warn:#E1897A; --warn-soft:#3A211D; --ok:#7FC29B; --ok-soft:#1B3327; --line:rgba(238,239,233,0.16); --surface:#181C15;
+  }
+}
+:root[data-theme="dark"] {
+  --paper:#12160F; --paper-dark:#191D14; --ink:#EEEFE9; --ink-soft:#A9AF9E;
+  --seal:#3E8C7E; --seal-light:#59A798; --gold:#D8B85A; --gold-soft:#33301C;
+  --warn:#E1897A; --warn-soft:#3A211D; --ok:#7FC29B; --ok-soft:#1B3327; --line:rgba(238,239,233,0.16); --surface:#181C15;
+}
+*{box-sizing:border-box;}
+html,body{height:100%;}
+html{scroll-padding-top:env(safe-area-inset-top,0px);}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased;}
+@media (prefers-reduced-motion: reduce){ *{animation-duration:.01ms !important; transition-duration:.01ms !important;} }
+img,svg{max-width:100%;display:block;}
+button{font-family:inherit;cursor:pointer;}
+input,select,textarea{font-family:inherit;font-size:15px;}
+a{color:inherit;}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px;}
+.hide{display:none !important;}
+:focus-visible{ outline:2px solid var(--seal); outline-offset:2px; }
+
+/* ---- entrance animation ---- */
+@keyframes riseIn{ from{opacity:0; transform:translateY(14px);} to{opacity:1; transform:translateY(0);} }
+.rise{ animation:riseIn .5s cubic-bezier(.2,.7,.3,1) both; }
+.rise-d1{ animation-delay:.08s; } .rise-d2{ animation-delay:.16s; } .rise-d3{ animation-delay:.24s; } .rise-d4{ animation-delay:.32s; }
+@keyframes fadeIn{ from{opacity:0;} to{opacity:1;} }
+.fade{ animation:fadeIn .3s ease both; }
+@keyframes drawCheck{ from{ stroke-dashoffset:40; } to{ stroke-dashoffset:0; } }
+@keyframes popIn{ 0%{transform:scale(.7); opacity:0;} 70%{transform:scale(1.06);} 100%{transform:scale(1); opacity:1;} }
+
+/* ---- Top bar ---- */
+.topbar{ position:sticky; top:0; z-index:40; background:color-mix(in srgb, var(--paper) 92%, transparent); backdrop-filter:blur(8px); border-bottom:1px solid var(--line); padding-top:env(safe-area-inset-top,0px); }
+.topbar-inner{ display:flex; align-items:center; justify-content:space-between; padding:14px 20px; max-width:1080px; margin:0 auto; gap:16px; }
+.brand{ display:flex; align-items:center; gap:9px; font-family:var(--serif); font-size:20px; font-weight:600; letter-spacing:-0.01em; background:none; border:none; padding:0; color:var(--ink); }
+.brand-mark{ width:26px;height:26px; flex-shrink:0; }
+nav.tabs{ display:flex; gap:2px; }
+nav.tabs button{ background:none; border:none; padding:8px 14px; font-size:13.5px; color:var(--ink-soft); border-bottom:2px solid transparent; font-weight:500; transition:color .15s, border-color .15s; }
+nav.tabs button.active{ color:var(--seal); border-bottom-color:var(--seal); }
+nav.tabs button:hover{ color:var(--ink); }
+.topbar-right{ display:flex; align-items:center; gap:10px; position:relative; }
+.hamburger{ display:none; background:none; border:1px solid var(--line); border-radius:var(--radius); width:38px; height:38px; align-items:center; justify-content:center; }
+.avatar-btn{ display:flex; align-items:center; gap:8px; background:none; border:1px solid var(--line); border-radius:20px; padding:5px 12px 5px 5px; }
+.avatar-circle{ width:26px;height:26px;border-radius:50%;background:var(--seal);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11.5px;font-weight:700;}
+.menu-panel{ position:absolute; top:46px; right:0; background:var(--surface); border:1px solid var(--line); border-radius:6px; min-width:220px; box-shadow:0 8px 24px rgba(0,0,0,.12); padding:8px; z-index:60; }
+.menu-panel button{ display:block; width:100%; text-align:left; background:none; border:none; padding:9px 10px; font-size:13.5px; border-radius:4px; color:var(--ink); }
+.menu-panel button:hover{ background:var(--paper-dark); }
+.menu-label{ font-size:11px; text-transform:uppercase; letter-spacing:.04em; color:var(--ink-soft); padding:6px 10px 2px; }
+.menu-divider{ border-top:1px solid var(--line); margin:6px 0; }
+
+@media (max-width:760px){
+  nav.tabs{ display:none; position:absolute; top:60px; left:0; right:0; background:var(--paper); border-bottom:1px solid var(--line); flex-direction:column; padding:8px 20px 14px; }
+  nav.tabs.open{ display:flex; }
+  nav.tabs button{ text-align:left; padding:11px 4px; border-bottom:1px solid var(--line); }
+  nav.tabs button.active{ border-bottom-color:var(--line); }
+  .hamburger{ display:flex; }
+}
+
+.demo-strip{ background:var(--gold-soft); color:var(--ink); font-size:12px; padding:7px 20px; text-align:center; border-bottom:1px solid var(--line); }
+.demo-strip b{ color:var(--gold); }
+
+main{ min-height:70vh; padding:32px 0 80px; }
+
+/* ---- Hero / illustrations ---- */
+.hero{ padding:52px 0 36px; display:grid; grid-template-columns:1.15fr 0.85fr; gap:40px; align-items:center; }
+@media (max-width:860px){ .hero{ grid-template-columns:1fr; padding-top:28px; } }
+.hero h1{ font-family:var(--serif); font-size:clamp(30px,4.6vw,50px); line-height:1.06; margin:0 0 16px; font-weight:600; }
+.hero p.lede{ font-size:16.5px; color:var(--ink-soft); max-width:52ch; margin:0 0 26px; }
+.hero-actions{ display:flex; gap:12px; flex-wrap:wrap; }
+.hero-art{ width:100%; }
+.stat-row{ display:flex; gap:30px; margin-top:44px; flex-wrap:wrap; border-top:1px solid var(--line); padding-top:20px; }
+.stat-row .stat b{ display:block; font-family:var(--serif); font-size:24px; }
+.stat-row .stat span{ font-size:12px; color:var(--ink-soft); }
+
+.howitworks{ display:grid; grid-template-columns:repeat(3,1fr); gap:20px; margin:8px 0 8px; }
+@media (max-width:760px){ .howitworks{ grid-template-columns:1fr; } }
+.how-card{ padding:4px 0; }
+.how-num{ font-family:var(--serif); font-size:13px; color:var(--seal); border:1px solid var(--seal); width:26px; height:26px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin-bottom:14px; }
+.how-card h3{ font-size:15px; margin:0 0 6px; }
+.how-card p{ font-size:13.5px; color:var(--ink-soft); margin:0; }
+
+/* ---- Buttons ---- */
+.btn{ display:inline-flex; align-items:center; gap:7px; padding:11px 20px; border-radius:var(--radius); font-size:14px; font-weight:600; border:1px solid transparent; transition:filter .15s, transform .08s; }
+.btn:hover{ filter:brightness(0.95); }
+.btn:active{ transform:scale(.98); }
+.btn-primary{ background:var(--seal); color:#fff; }
+.btn-secondary{ background:transparent; border-color:var(--ink); color:var(--ink); }
+.btn-ghost{ background:transparent; color:var(--seal); padding:10px 4px; }
+.btn-warn{ background:var(--warn); color:#fff; }
+.btn-sm{ padding:7px 13px; font-size:12.5px; }
+.btn-block{ width:100%; justify-content:center; }
+.btn:disabled{ opacity:.5; cursor:not-allowed; }
+
+.card{ background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); padding:20px; }
+.section-title{ font-family:var(--serif); font-size:23px; margin:0 0 4px; font-weight:600; }
+.section-sub{ color:var(--ink-soft); font-size:13.5px; margin:0 0 22px; }
+
+.grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:16px; }
+.listing-card{ background:var(--surface); border:1px solid var(--line); overflow:hidden; display:flex; flex-direction:column; transition:border-color .15s, transform .15s; }
+.listing-card:hover{ border-color:var(--seal); }
+.listing-photo{ aspect-ratio:4/3; background:var(--paper-dark); display:flex; align-items:center; justify-content:center; border-bottom:1px solid var(--line); padding:18%; }
+.listing-body{ padding:13px 14px 15px; display:flex; flex-direction:column; gap:6px; flex:1; }
+.listing-title{ font-weight:600; font-size:14px; line-height:1.3; }
+.listing-price{ font-family:var(--serif); font-size:19px; }
+.listing-meta{ font-size:11.5px; color:var(--ink-soft); display:flex; justify-content:space-between; align-items:center; }
+.badge{ display:inline-flex; align-items:center; gap:4px; font-size:11px; font-weight:600; padding:2px 7px; border-radius:20px; }
+.badge-verified{ background:var(--ok-soft); color:var(--ok); }
+.badge-unverified{ background:var(--warn-soft); color:var(--warn); }
+.badge-protect{ background:var(--gold-soft); color:var(--gold); }
+
+.field{ margin-bottom:16px; }
+.field label{ display:block; font-size:12.5px; font-weight:600; margin-bottom:6px; color:var(--ink-soft); }
+.field input, .field select, .field textarea{ width:100%; padding:11px 12px; border:1px solid var(--line); border-radius:var(--radius); background:var(--paper); color:var(--ink); }
+.field input:focus, .field select:focus, .field textarea:focus{ border-color:var(--seal); }
+.field textarea{ resize:vertical; min-height:80px; }
+.field-row{ display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+@media (max-width:560px){ .field-row{ grid-template-columns:1fr; } }
+
+/* ---- Auth screens ---- */
+.authscreen{ min-height:100vh; display:flex; align-items:center; justify-content:center; padding:40px 20px; }
+.auth-box{ width:100%; max-width:380px; }
+.auth-brand{ display:flex; align-items:center; gap:9px; font-family:var(--serif); font-size:22px; font-weight:600; margin-bottom:34px; justify-content:center; }
+.otp-boxes{ display:flex; gap:8px; justify-content:center; margin:22px 0 18px; }
+.otp-boxes input{ width:42px; height:50px; text-align:center; font-size:20px; border:1px solid var(--line); border-radius:6px; background:var(--paper); color:var(--ink); }
+.otp-boxes input:focus{ border-color:var(--seal); }
+.auth-hint{ background:var(--gold-soft); border:1px solid var(--gold); color:var(--ink); font-size:12.5px; padding:10px 12px; border-radius:6px; margin-bottom:18px; text-align:center; }
+.auth-switch{ text-align:center; margin-top:18px; font-size:13px; color:var(--ink-soft); }
+.auth-switch a{ color:var(--seal); font-weight:600; cursor:pointer; }
+.demo-quick{ margin-top:26px; border-top:1px solid var(--line); padding-top:18px; }
+
+/* ---- Toast notification ---- */
+#toast{ position:fixed; bottom:24px; right:24px; background:var(--ink); color:var(--paper); padding:12px 18px; border-radius:6px; font-size:13.5px; z-index:999; display:none; max-width:360px; box-shadow:0 6px 18px rgba(0,0,0,0.18); }
+#toast.show{ display:block; animation:fadeIn .2s ease; }
+
+/* ---- Two col ---- */
+.two-col{ display:grid; grid-template-columns:1fr 300px; gap:24px; }
+@media (max-width:800px){ .two-col{ grid-template-columns:1fr; } }
+.kv-row{ display:flex; justify-content:space-between; font-size:13.5px; padding:6px 0; border-bottom:1px solid var(--line); }
+.trust-meter{ display:flex; align-items:baseline; gap:6px; margin:10px 0; }
+.trust-meter b{ font-family:var(--serif); font-size:42px; color:var(--seal); }
+
+/* ---- Chat ---- */
+.chat-shell{ display:grid; grid-template-columns:260px 1fr; border:1px solid var(--line); border-radius:var(--radius); min-height:480px; background:var(--surface); }
+@media (max-width:680px){ .chat-shell{ grid-template-columns:1fr; } }
+.chat-list{ border-right:1px solid var(--line); overflow-y:auto; max-height:480px; }
+.chat-list-item{ padding:12px 14px; border-bottom:1px solid var(--line); cursor:pointer; }
+.chat-list-item:hover, .chat-list-item.active{ background:var(--paper); }
+.chat-list-item .cli-title{ font-weight:600; font-size:13.5px; }
+.chat-list-item .cli-sub{ font-size:11.5px; color:var(--ink-soft); }
+.chat-main{ display:flex; flex-direction:column; height:100%; min-height:480px; }
+.chat-header{ padding:12px 16px; border-bottom:1px solid var(--line); display:flex; justify-content:space-between; align-items:center; background:var(--paper); }
+.chat-messages{ flex:1; padding:16px; overflow-y:auto; display:flex; flex-direction:column; gap:10px; max-height:380px; }
+.msg{ max-width:75%; padding:9px 13px; border-radius:12px; font-size:13.5px; line-height:1.4; word-break:break-word; }
+.msg.mine{ align-self:flex-end; background:var(--seal); color:#fff; border-bottom-right-radius:2px; }
+.msg.theirs{ align-self:flex-start; background:var(--paper-dark); color:var(--ink); border-bottom-left-radius:2px; }
+.msg-flag{ align-self:center; background:var(--warn-soft); border:1px solid var(--warn); color:var(--warn); font-size:12px; padding:6px 12px; border-radius:6px; max-width:90%; text-align:center; }
+.chat-input{ padding:12px; border-top:1px solid var(--line); display:flex; gap:8px; background:var(--paper); }
+.chat-input input{ flex:1; padding:9px 12px; border:1px solid var(--line); border-radius:var(--radius); background:var(--surface); }
+
+/* ---- Table ---- */
+.table-scroll{ overflow-x:auto; }
+table{ width:100%; border-collapse:collapse; font-size:13px; }
+th,td{ padding:9px 10px; text-align:left; border-bottom:1px solid var(--line); }
+th{ font-weight:600; color:var(--ink-soft); font-size:11.5px; text-transform:uppercase; letter-spacing:.03em; }
+
+@keyframes shimmer{ 0%{background-position:100% 50%;} 100%{background-position:0 50%;} }
+.verify-pulse{ animation:popIn .4s ease both; }
+</style>
+</head>
+<body>
+
+<div id="rootAuth" class="hide"></div>
+<div id="rootApp" class="hide">
+  <div class="demo-strip">⬤ <b>Backend Connected</b> — Powered by Fastify/Postgres/Redis API at <code id="apiBaseUrlLabel">http://localhost:4000</code>.</div>
+  <div class="topbar">
+    <div class="topbar-inner">
+      <button class="brand" onclick="setView('home')" aria-label="TrustTrade home">
+        <svg class="brand-mark" viewBox="0 0 26 26" fill="none"><circle cx="13" cy="13" r="12" fill="var(--seal)"/><path d="M8 13.2l3.3 3.3L18.5 9" stroke="var(--paper)" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        TrustTrade
+      </button>
+      <nav class="tabs" id="tabs">
+        <button data-view="home">Home</button>
+        <button data-view="browse">Browse</button>
+        <button data-view="sell">Sell</button>
+        <button data-view="chats">Trades</button>
+        <button data-view="profile">Profile</button>
+        <button data-view="admin">Admin</button>
+      </nav>
+      <div class="topbar-right">
+        <button class="hamburger" id="hamburgerBtn" aria-label="Menu">
+          <svg width="18" height="18" viewBox="0 0 18 18"><path d="M2 5h14M2 9h14M2 13h14" stroke="var(--ink)" stroke-width="1.6" stroke-linecap="round"/></svg>
+        </button>
+        <button class="avatar-btn" id="avatarBtn">
+          <span class="avatar-circle" id="avatarInitial">?</span>
+          <span id="avatarName" style="font-size:12.5px;"></span>
+        </button>
+        <div class="menu-panel hide" id="accountMenu"></div>
+      </div>
+    </div>
+  </div>
+  <main class="wrap" id="app"></main>
+</div>
+
+<div id="toast"></div>
+
+/* ============ CONFIGURATION & NETWORKING ============ */
+// PRODUCTION CONFIGURATION: Edit API_BASE_URL to point to your Railway backend URL before deploying to Vercel/Netlify.
+// Example: const API_BASE_URL = 'https://trusttrade-backend-production.up.railway.app';
+const API_BASE_URL = window.API_BASE_URL || 'http://localhost:4000';
+
+document.addEventListener('DOMContentLoaded', () => {
+  const label = document.getElementById('apiBaseUrlLabel');
+  if (label) label.textContent = API_BASE_URL;
+});
+
+let ACCESS_TOKEN = null;
+let CURRENT_USER = null;
+let PENDING_PHONE = null;
+
+async function apiFetch(endpoint, options = {}) {
+  options.headers = options.headers || {};
+  if (ACCESS_TOKEN) {
+    options.headers['Authorization'] = `Bearer ${ACCESS_TOKEN}`;
+  }
+  if (options.body && typeof options.body === 'object' && !(options.body instanceof FormData)) {
+    options.headers['Content-Type'] = 'application/json';
+    options.body = JSON.stringify(options.body);
+  }
+  options.credentials = 'include'; // Attach httpOnly refresh cookie
+
+  let res;
+  try {
+    res = await fetch(`${API_BASE_URL}${endpoint}`, options);
+  } catch (err) {
+    throw new Error('Unable to connect to backend server. Check API URL.');
+  }
+
+  // Handle 401 Unauthorized -> Attempt single silent refresh
+  if (res.status === 401 && !options._retry && endpoint !== '/auth/refresh' && endpoint !== '/auth/otp/verify' && endpoint !== '/auth/otp/request') {
+    options._retry = true;
+    const refreshed = await refreshToken();
+    if (refreshed) {
+      options.headers['Authorization'] = `Bearer ${ACCESS_TOKEN}`;
+      res = await fetch(`${API_BASE_URL}${endpoint}`, options);
+    } else {
+      ACCESS_TOKEN = null;
+      CURRENT_USER = null;
+      showAuth();
+      throw new Error('Session expired. Please log in again.');
+    }
+  }
+
+  let data;
+  try { data = await res.json(); } catch (e) { data = null; }
+
+  if (!res.ok) {
+    const msg = data?.error?.message || `Request failed with status ${res.status}`;
+    throw new Error(msg);
+  }
+  return data;
+}
+
+async function refreshToken() {
+  try {
+    const res = await fetch(`${API_BASE_URL}/auth/refresh`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({}),
+      credentials: 'include',
+    });
+    if (res.ok) {
+      const data = await res.json();
+      ACCESS_TOKEN = data.accessToken;
+      return true;
+    }
+  } catch (e) {}
+  ACCESS_TOKEN = null;
+  return false;
+}
+
+/* ============ SCAM DETECTION (Client Warning Check) ============ */
+const SCAM_RULES = [
+  { test:/scan.{0,15}qr|qr.{0,10}code.{0,20}(receive|accept|get)/i, reason:'Scanning a QR code never "receives" money — it authorises a payment OUT of an account. This matches a known UPI scam pattern.' },
+  { test:/(army|defence|defense|military|cisf|bsf|posted at border)/i, reason:'Claims of being defence/army personnel unable to meet in person are a very common scam script. Insist on meeting in person before any payment.' },
+  { test:/(advance|token amount|booking amount).{0,25}(before|first|pay)/i, reason:'Requests for an advance/token payment before you\'ve seen or verified the item are a common fraud pattern.' },
+  { test:/(courier|shipping).{0,20}(insurance|fee|charge)/i, reason:'Courier/shipping "insurance fee" requests are a known scam used to extract extra payments after an initial deposit.' },
+  { test:/(sent extra|overpaid|refund the difference|excess amount)/i, reason:'Overpayment-then-refund requests are a classic reversal scam — the original payment is usually fake or later reversed.' },
+];
+function scanMessage(text){ for(const r of SCAM_RULES){ if(r.test.test(text)) return {flagged:true, reason:r.reason}; } return {flagged:false}; }
+
+/* ============ UTIL ============ */
+function toast(msg){ const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(window.__toastT); window.__toastT = setTimeout(()=> t.classList.remove('show'), 2800); }
+function fmtMoney(n){ return '₹' + (n || 0).toLocaleString('en-IN'); }
+function fmtDate(ts){ if(!ts) return '—'; return new Date(ts).toLocaleDateString('en-IN', {day:'numeric', month:'short'}); }
+function escapeHtml(s){ return (s||'').replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function initials(name){ return (name||'U').split(' ').map(p=>p[0]).slice(0,2).join('').toUpperCase(); }
+
+/* ============ AUTH STATE ============ */
+async function boot() {
+  const refreshed = await refreshToken();
+  if (refreshed) {
+    try {
+      const data = await apiFetch('/users/me');
+      CURRENT_USER = data.user;
+      showApp();
+      return;
+    } catch (e) {
+      ACCESS_TOKEN = null;
+    }
+  }
+  showAuth();
+}
+
+function showAuth() {
+  document.getElementById('rootApp').classList.add('hide');
+  document.getElementById('rootAuth').classList.remove('hide');
+  renderAuth('landing');
+}
+
+function showApp() {
+  document.getElementById('rootAuth').classList.add('hide');
+  document.getElementById('rootApp').classList.remove('hide');
+  renderAccountChrome();
+  setView('home');
+}
+
+async function logout() {
+  try {
+    await apiFetch('/auth/logout', { method: 'POST', body: {} });
+  } catch (e) {}
+  ACCESS_TOKEN = null;
+  CURRENT_USER = null;
+  toast('Logged out');
+  showAuth();
+}
+
+/* ---- Auth screens ---- */
+function renderAuth(step) {
+  const root = document.getElementById('rootAuth');
+  if (step === 'landing') root.innerHTML = landingHTML();
+  else if (step === 'phone') root.innerHTML = phoneStepHTML();
+  else if (step === 'otp') root.innerHTML = otpStepHTML();
+}
+
+function landingHTML() {
+  return `
+  <div class="wrap fade">
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:20px 0;">
+      <div class="auth-brand" style="margin:0;">${sealSvg(28)} TrustTrade</div>
+      <button class="btn btn-secondary btn-sm" onclick="renderAuth('phone')">Log in</button>
+    </div>
+    <section class="hero">
+      <div class="rise">
+        <h1 class="rise">Trade second-hand with someone you can actually verify.</h1>
+        <p class="lede rise rise-d1">TrustTrade adds identity verification, live scam-pattern warnings, and safe-meetup coordination to peer-to-peer resale in India — the layer OLX and Facebook Marketplace don't give you.</p>
+        <div class="hero-actions rise rise-d2">
+          <button class="btn btn-primary" onclick="renderAuth('phone')">Get started free</button>
+          <button class="btn btn-ghost" onclick="document.getElementById('howsec').scrollIntoView({behavior:'smooth'})">See how it works ↓</button>
+        </div>
+      </div>
+      <div class="hero-art rise rise-d2">${heroIllustration()}</div>
+    </section>
+    <hr class="divider">
+    <section id="howsec">
+      <p class="section-title">How it works</p>
+      <p class="section-sub">Three steps between "found a listing" and "traded safely."</p>
+      <div class="howitworks">
+        <div class="how-card"><div class="how-num">1</div><h3>Verify who you are</h3><p>Quick ID check gives you a trust badge buyers and sellers can actually see, before any money changes hands.</p></div>
+        <div class="how-card"><div class="how-num">2</div><h3>Chat, protected</h3><p>Every message is scanned live for known scam scripts — fake QR refunds, advance-deposit traps, courier fee tricks.</p></div>
+        <div class="how-card"><div class="how-num">3</div><h3>Meet safely, trade</h3><p>Get a suggested safe meeting spot, log the trade, and rate each other once it's done.</p></div>
+      </div>
+    </section>
+  </div>`;
+}
+
+function phoneStepHTML() {
+  return `
+  <div class="authscreen fade">
+    <div class="auth-box">
+      <div class="auth-brand">${sealSvg(30)} TrustTrade</div>
+      <p class="section-title" style="text-align:center;font-size:20px;">Enter your phone number</p>
+      <p class="section-sub" style="text-align:center;">We'll send a 6-digit verification code via SMS.</p>
+      <div class="field">
+        <label>Mobile number</label>
+        <input id="phoneInput" type="tel" placeholder="98765 43210" maxlength="15" autofocus>
+      </div>
+      <button class="btn btn-primary btn-block" onclick="requestOtp()">Send OTP</button>
+      <div class="auth-switch"><a onclick="renderAuth('landing')">← Back</a></div>
+    </div>
+  </div>`;
+}
+
+async function requestOtp() {
+  const raw = document.getElementById('phoneInput').value.trim();
+  if (raw.length < 8) { toast('Enter a valid phone number'); return; }
+  PENDING_PHONE = raw.startsWith('+') ? raw : `+91${raw}`;
+  const btn = document.querySelector('.authscreen button');
+  if (btn) { btn.disabled = true; btn.textContent = 'Sending...'; }
+  try {
+    await apiFetch('/auth/otp/request', {
+      method: 'POST',
+      body: { phone: PENDING_PHONE }
+    });
+    renderAuth('otp');
+    toast('OTP requested. Check server log for SMS code.');
+  } catch (err) {
+    toast(err.message);
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = 'Send OTP'; }
+  }
+}
+
+function otpStepHTML() {
+  return `
+  <div class="authscreen fade">
+    <div class="auth-box">
+      <div class="auth-brand">${sealSvg(30)} TrustTrade</div>
+      <p class="section-title" style="text-align:center;font-size:20px;">Enter the code</p>
+      <p class="section-sub" style="text-align:center;">Sent to ${escapeHtml(PENDING_PHONE)}</p>
+      <div class="otp-boxes">
+        ${[0,1,2,3,4,5].map(i => `<input class="otpDigit" data-i="${i}" maxlength="1" inputmode="numeric" onkeyup="otpKey(event,${i})">`).join('')}
+      </div>
+      <button class="btn btn-primary btn-block" onclick="verifyOtp()">Verify &amp; continue</button>
+      <div class="auth-switch"><a onclick="renderAuth('phone')">← Change number</a></div>
+    </div>
+  </div>`;
+}
+
+function otpKey(e, i) {
+  const val = e.target.value.replace(/\D/g, '');
+  e.target.value = val;
+  if (val && i < 5) { document.querySelectorAll('.otpDigit')[i+1].focus(); }
+  if (e.key === 'Enter') verifyOtp();
+}
+
+async function verifyOtp() {
+  const entered = Array.from(document.querySelectorAll('.otpDigit')).map(i => i.value).join('');
+  if (entered.length < 6) { toast('Enter all 6 digits'); return; }
+  const btn = document.querySelector('.authscreen button');
+  if (btn) { btn.disabled = true; btn.textContent = 'Verifying...'; }
+  try {
+    const data = await apiFetch('/auth/otp/verify', {
+      method: 'POST',
+      body: { phone: PENDING_PHONE, otp: entered }
+    });
+    ACCESS_TOKEN = data.accessToken;
+    CURRENT_USER = data.user;
+    toast('Authentication successful');
+    showApp();
+  } catch (err) {
+    toast(err.message);
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = 'Verify & continue'; }
+  }
+}
+
+/* ---- account chrome ---- */
+function renderAccountChrome() {
+  const u = CURRENT_USER || { name: 'User' };
+  document.getElementById('avatarInitial').textContent = initials(u.name);
+  document.getElementById('avatarName').textContent = u.name.split(' ')[0];
+  document.getElementById('accountMenu').innerHTML = `
+    <div class="menu-label">Signed in as</div>
+    <div style="padding:2px 10px 8px;font-size:13.5px;font-weight:600;">${escapeHtml(u.name)}</div>
+    <div class="menu-divider"></div>
+    <button onclick="logout()">Log out</button>
+  `;
+}
+
+function toggleMenu(forceClose) { document.getElementById('accountMenu').classList.toggle('hide', forceClose || undefined); }
+document.getElementById('avatarBtn').addEventListener('click', () => document.getElementById('accountMenu').classList.toggle('hide'));
+document.addEventListener('click', e => { if (!e.target.closest('.topbar-right')) document.getElementById('accountMenu').classList.add('hide'); });
+document.getElementById('hamburgerBtn').addEventListener('click', () => document.getElementById('tabs').classList.toggle('open'));
+
+/* ============ ILLUSTRATIONS ============ */
+function sealSvg(size) {
+  return `<svg width="${size}" height="${size}" viewBox="0 0 26 26" fill="none"><circle cx="13" cy="13" r="12" fill="var(--seal)"/><path d="M8 13.2l3.3 3.3L18.5 9" stroke="var(--paper)" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+}
+function heroIllustration() {
+  return `
+  <svg viewBox="0 0 420 340" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+    <rect x="18" y="40" width="384" height="260" rx="4" fill="var(--surface)" stroke="var(--line)"/>
+    <rect x="18" y="40" width="384" height="42" rx="4" fill="var(--paper-dark)" stroke="var(--line)"/>
+    <circle cx="42" cy="61" r="6" fill="var(--warn)" opacity=".5"/>
+    <circle cx="60" cy="61" r="6" fill="var(--gold)" opacity=".6"/>
+    <circle cx="78" cy="61" r="6" fill="var(--ok)" opacity=".6"/>
+    <g transform="translate(42,104)">
+      <rect width="140" height="170" rx="4" fill="var(--paper)" stroke="var(--line)"/>
+      <circle cx="70" cy="46" r="26" fill="var(--paper-dark)" stroke="var(--line)"/>
+      <path d="M58 46a12 12 0 0 1 24 0" stroke="var(--ink-soft)" stroke-width="2" fill="none"/>
+      <circle cx="70" cy="38" r="8" fill="var(--ink-soft)"/>
+      <rect x="30" y="86" width="80" height="8" rx="3" fill="var(--line)"/>
+      <rect x="42" y="100" width="56" height="6" rx="3" fill="var(--line)"/>
+      <g transform="translate(38,120)">
+        <circle cx="12" cy="12" r="12" fill="var(--ok-soft)"/>
+        <path d="M7 12l3.2 3.2L18 8" stroke="var(--ok)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <text x="30" y="16" font-family="IBM Plex Sans" font-size="10" fill="var(--ok)" font-weight="600">Verified</text>
+      </g>
+    </g>
+    <g transform="translate(206,104)">
+      <rect width="152" height="170" rx="4" fill="var(--paper)" stroke="var(--line)"/>
+      <rect x="14" y="16" width="96" height="24" rx="10" fill="var(--paper-dark)"/>
+      <rect x="14" y="48" width="120" height="24" rx="10" fill="var(--seal)"/>
+      <g transform="translate(14,86)">
+        <rect width="124" height="40" rx="5" fill="var(--warn-soft)" stroke="var(--warn)"/>
+        <text x="10" y="17" font-family="IBM Plex Sans" font-size="8.5" fill="var(--warn)" font-weight="600">⚠ Scam pattern</text>
+        <text x="10" y="30" font-family="IBM Plex Sans" font-size="7.5" fill="var(--warn)">matched &amp; flagged live</text>
+      </g>
+      <rect x="14" y="136" width="70" height="20" rx="9" fill="var(--paper-dark)"/>
+    </g>
+    <g transform="translate(185,220)">
+      <circle cx="20" cy="20" r="20" fill="var(--gold-soft)" stroke="var(--gold)"/>
+      <path d="M12 20l5.3 5.3L28.5 14.5" stroke="var(--gold)" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+  </svg>`;
+}
+function categoryIcon(cat) {
+  const c = 'var(--ink-soft)';
+  if (cat === 'ELECTRONICS' || cat === 'Electronics') return `<svg viewBox="0 0 48 48" width="52" height="52"><rect x="10" y="6" width="28" height="36" rx="3" stroke="${c}" stroke-width="2" fill="none"/><line x1="10" y1="34" x2="38" y2="34" stroke="${c}" stroke-width="2"/><circle cx="24" cy="38" r="1.6" fill="${c}"/></svg>`;
+  if (cat === 'FURNITURE' || cat === 'Furniture') return `<svg viewBox="0 0 48 48" width="52" height="52"><path d="M10 20v18M38 20v18M10 20h28M14 12h20v8H14z" stroke="${c}" stroke-width="2" fill="none" stroke-linejoin="round"/></svg>`;
+  if (cat === 'VEHICLES' || cat === 'Vehicles') return `<svg viewBox="0 0 48 48" width="52" height="52"><circle cx="16" cy="34" r="5" stroke="${c}" stroke-width="2" fill="none"/><circle cx="34" cy="34" r="5" stroke="${c}" stroke-width="2" fill="none"/><path d="M8 34h4l4-14h16l6 10h4M16 20l4-6h6" stroke="${c}" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+  if (cat === 'APPLIANCES' || cat === 'Appliances') return `<svg viewBox="0 0 48 48" width="52" height="52"><rect x="14" y="6" width="20" height="36" rx="2" stroke="${c}" stroke-width="2" fill="none"/><line x1="14" y1="20" x2="34" y2="20" stroke="${c}" stroke-width="2"/><circle cx="24" cy="14" r="1.6" fill="${c}"/><circle cx="24" cy="28" r="1.6" fill="${c}"/></svg>`;
+  return `<svg viewBox="0 0 48 48" width="52" height="52"><path d="M8 16l16-8 16 8-16 8-16-8z" stroke="${c}" stroke-width="2" fill="none" stroke-linejoin="round"/><path d="M8 16v16l16 8 16-8V16M24 24v16" stroke="${c}" stroke-width="2" fill="none" stroke-linejoin="round"/></svg>`;
+}
+function emptyIllustration(label) {
+  return `<div style="text-align:center;padding:50px 20px;">
+    <svg width="72" height="72" viewBox="0 0 72 72" style="margin:0 auto 16px;"><circle cx="36" cy="36" r="34" stroke="var(--line)" stroke-width="2" fill="none" stroke-dasharray="4 5"/><path d="M24 44l8-16 8 10 6-8 8 14" stroke="var(--ink-soft)" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <p class="small-note">${label}</p>
+  </div>`;
+}
+
+/* ============ ROUTER ============ */
+let VIEW = 'home';
+function setView(v) {
+  VIEW = v;
+  document.querySelectorAll('#tabs button').forEach(b => b.classList.toggle('active', b.dataset.view === v));
+  document.getElementById('tabs').classList.remove('open');
+  route();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+document.getElementById('tabs').addEventListener('click', e => { const b = e.target.closest('button[data-view]'); if (!b) return; setView(b.dataset.view); });
+
+function route() {
+  const app = document.getElementById('app');
+  app.classList.remove('fade'); void app.offsetWidth; app.classList.add('fade');
+  const views = { home: viewHome, browse: viewBrowse, sell: viewSell, chats: viewChats, profile: viewProfile, admin: viewAdmin };
+  (views[VIEW] || viewHome)(app);
+}
+
+/* ============ VIEW: HOME ============ */
+async function viewHome(app) {
+  app.innerHTML = `<div style="text-align:center;padding:40px;"><p>Loading dashboard...</p></div>`;
+  try {
+    const [meData, listingsData] = await Promise.all([
+      apiFetch('/users/me'),
+      apiFetch('/listings?status=ACTIVE&limit=4')
+    ]);
+    CURRENT_USER = meData.user;
+    const listings = listingsData.listings || [];
+    const myListings = listings.filter(l => l.sellerId === CURRENT_USER.id);
+
+    app.innerHTML = `
+      <div class="rise" style="margin-bottom:28px;">
+        <p class="section-title">Welcome back, ${escapeHtml(CURRENT_USER.name.split(' ')[0])}</p>
+        <p class="section-sub">${CURRENT_USER.kycStatus === 'VERIFIED' ? 'Your account is verified — listings show your trust badge.' : 'You\'re not verified yet — verify from your Profile to unlock the trust badge.'}</p>
+      </div>
+      <div class="two-col rise rise-d1">
+        <div>
+          <p style="font-weight:600;margin:0 0 12px;">Recently listed</p>
+          <div class="grid" id="recentGrid"></div>
+        </div>
+        <div class="card">
+          <p style="font-weight:600;margin:0 0 10px;">Your account</p>
+          <div class="kv-row"><span>Trust score</span><span>${CURRENT_USER.trustScore || 0}/100</span></div>
+          <div class="kv-row"><span>Active listings</span><span>${myListings.length}</span></div>
+          <div class="kv-row"><span>Verification</span><span>${CURRENT_USER.kycStatus === 'VERIFIED' ? '✓ Verified' : 'Pending'}</span></div>
+          <button class="btn btn-primary btn-sm" style="margin-top:14px;width:100%;" onclick="setView('sell')">List an item</button>
+        </div>
+      </div>
+    `;
+    renderListingCards(document.getElementById('recentGrid'), listings);
+  } catch (err) {
+    app.innerHTML = `<div class="card"><p style="color:var(--warn);">${escapeHtml(err.message)}</p></div>`;
+  }
+}
+
+/* ============ VIEW: BROWSE ============ */
+async function viewBrowse(app) {
+  app.innerHTML = `
+    <p class="section-title rise">Browse listings</p>
+    <p class="section-sub rise">Every seller's verification status is shown up front.</p>
+    <div class="grid rise rise-d1" id="grid"><p>Loading listings...</p></div>
+  `;
+  try {
+    const data = await apiFetch('/listings?status=ACTIVE');
+    const grid = app.querySelector('#grid');
+    if (!data.listings || !data.listings.length) {
+      grid.outerHTML = emptyIllustration('No listings yet.');
+      return;
+    }
+    renderListingCards(grid, data.listings);
+  } catch (err) {
+    app.querySelector('#grid').innerHTML = `<p style="color:var(--warn);">${escapeHtml(err.message)}</p>`;
+  }
+}
+
+function renderListingCards(container, listings) {
+  if (!listings || !listings.length) { container.innerHTML = '<p class="small-note">Nothing here yet.</p>'; return; }
+  container.innerHTML = listings.map(l => {
+    const seller = l.seller || {};
+    const isMine = l.sellerId === CURRENT_USER?.id;
+    return `
+    <div class="listing-card">
+      <div class="listing-photo">${categoryIcon(l.category)}</div>
+      <div class="listing-body">
+        <div class="listing-title">${escapeHtml(l.title)}</div>
+        <div class="listing-price">${fmtMoney(l.priceInr || l.price)}</div>
+        <div class="tag-list">
+          ${seller.kycStatus === 'VERIFIED' || seller.verified ? '<span class="badge badge-verified">✓ Verified seller</span>' : '<span class="badge badge-unverified">Unverified</span>'}
+          ${l.protectRecommended || l.protect ? '<span class="badge badge-protect">Protection recommended</span>' : ''}
+        </div>
+        <div class="listing-meta"><span>${escapeHtml(seller.name || 'Seller')}</span><span>${fmtDate(l.createdAt)}</span></div>
+        <button class="btn btn-primary btn-sm" style="margin-top:8px;" onclick="startTrade('${l.id}')" ${isMine ? 'disabled' : ''}>${isMine ? 'Your listing' : 'Message seller'}</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+async function startTrade(listingId) {
+  try {
+    const data = await apiFetch('/conversations', {
+      method: 'POST',
+      body: { listingId }
+    });
+    setView('chats');
+    setTimeout(() => openConversation(data.conversation.id), 50);
+  } catch (err) {
+    toast(err.message);
+  }
+}
+
+/* ============ VIEW: SELL ============ */
+function viewSell(app) {
+  const isVerified = CURRENT_USER?.kycStatus === 'VERIFIED';
+  app.innerHTML = `
+    <p class="section-title rise">Create a listing</p>
+    <p class="section-sub rise">${isVerified ? 'You\'re a verified seller — your listings show a trust badge automatically.' : '⚠ You\'re not verified yet. Buyers see an "Unverified" tag on your listings. <a href="#" onclick="setView(\'profile\');return false;" style="color:var(--seal);">Verify now →</a>'}</p>
+    <div class="card rise rise-d1" style="max-width:560px;">
+      <div class="field"><label>Title</label><input id="f_title" placeholder="e.g. Samsung Galaxy S21, 128GB"></div>
+      <div class="field-row">
+        <div class="field"><label>Category</label>
+          <select id="f_cat"><option value="ELECTRONICS">Electronics</option><option value="FURNITURE">Furniture</option><option value="VEHICLES">Vehicles</option><option value="APPLIANCES">Appliances</option><option value="OTHER">Other</option></select>
+        </div>
+        <div class="field"><label>Price (₹)</label><input id="f_price" type="number" placeholder="15000"></div>
+      </div>
+      <div class="field"><label>Condition</label>
+        <select id="f_cond"><option value="NEW">New</option><option value="USED_LIKE_NEW">Used - Like New</option><option value="USED_GOOD">Used - Good</option><option value="FOR_PARTS">For Parts</option></select>
+      </div>
+      <div class="field"><label>Description</label><textarea id="f_desc" placeholder="Honest condition details, reason for selling, what's included..."></textarea></div>
+      <label style="display:flex;gap:8px;align-items:flex-start;font-size:12.5px;color:var(--ink-soft);margin-bottom:16px;">
+        <input type="checkbox" id="f_protect" style="margin-top:2px;">
+        Recommend payment protection for this item (suggested for high-value electronics/vehicles)
+      </label>
+      <button class="btn btn-primary btn-block" onclick="createListing()">Publish listing</button>
+    </div>
+  `;
+}
+
+async function createListing() {
+  const title = document.getElementById('f_title').value.trim();
+  const priceInr = parseInt(document.getElementById('f_price').value, 10);
+  const category = document.getElementById('f_cat').value;
+  const condition = document.getElementById('f_cond').value;
+  const description = document.getElementById('f_desc').value.trim();
+  const protectRecommended = document.getElementById('f_protect').checked;
+
+  if (!title || !priceInr || !description) {
+    toast('Please fill in title, price, and description');
+    return;
+  }
+
+  const btn = document.querySelector('.card button');
+  if (btn) { btn.disabled = true; btn.textContent = 'Publishing...'; }
+
+  try {
+    await apiFetch('/listings', {
+      method: 'POST',
+      body: {
+        title,
+        category,
+        priceInr,
+        condition,
+        description,
+        protectRecommended,
+        photoUrls: []
+      }
+    });
+    toast('Listing published');
+    setView('browse');
+  } catch (err) {
+    toast(err.message);
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = 'Publish listing'; }
+  }
+}
+
+/* ============ VIEW: CHATS ============ */
+let ACTIVE_CONVO = null;
+async function viewChats(app) {
+  app.innerHTML = `
+    <p class="section-title rise">Your trades</p>
+    <p class="section-sub rise">Chat is monitored live by server scam detection engine.</p>
+    <div class="chat-shell rise rise-d1">
+      <div class="chat-list" id="chatList"><p style="padding:16px;">Loading conversations...</p></div>
+      <div class="chat-main" id="chatMain"><div class="empty-chat">Select a conversation, or message a seller from Browse.</div></div>
+    </div>
+  `;
+  try {
+    const data = await apiFetch('/conversations');
+    const myConvos = data.conversations || [];
+    const list = app.querySelector('#chatList');
+    if (!myConvos.length) {
+      list.innerHTML = '<div class="small-note" style="padding:16px;">No conversations yet.</div>';
+      return;
+    }
+    list.innerHTML = myConvos.map(c => {
+      const listing = c.listing || {};
+      const other = (c.buyerId === CURRENT_USER.id ? c.seller : c.buyer) || {};
+      return `<div class="chat-list-item" data-id="${c.id}" onclick="openConversation('${c.id}')">
+        <div class="cli-title">${escapeHtml(listing.title || 'Listing')}</div>
+        <div class="cli-sub">with ${escapeHtml(other.name || 'User')}</div>
+      </div>`;
+    }).join('');
+    if (ACTIVE_CONVO) openConversation(ACTIVE_CONVO);
+  } catch (err) {
+    app.querySelector('#chatList').innerHTML = `<div style="padding:16px;color:var(--warn);">${escapeHtml(err.message)}</div>`;
+  }
+}
+
+async function openConversation(convoId) {
+  ACTIVE_CONVO = convoId;
+  document.querySelectorAll('.chat-list-item').forEach(el => el.classList.toggle('active', el.dataset.id === convoId));
+  const main = document.getElementById('chatMain');
+  main.innerHTML = '<div class="empty-chat">Loading chat...</div>';
+
+  try {
+    const [convosData, msgsData, txsData] = await Promise.all([
+      apiFetch('/conversations'),
+      apiFetch(`/conversations/${convoId}/messages`),
+      apiFetch('/transactions')
+    ]);
+
+    const convo = (convosData.conversations || []).find(c => c.id === convoId);
+    if (!convo) return;
+
+    const listing = convo.listing || {};
+    const other = (convo.buyerId === CURRENT_USER.id ? convo.seller : convo.buyer) || {};
+    const messages = msgsData.messages || [];
+    const existingTx = (txsData.transactions || []).find(t => t.listingId === convo.listingId);
+
+    main.innerHTML = `
+      <div class="chat-header">
+        <div>
+          <div style="font-weight:600;">${escapeHtml(other.name || 'User')} ${other.kycStatus === 'VERIFIED' ? '<span class="badge badge-verified" style="margin-left:6px;">✓ Verified</span>' : '<span class="badge badge-unverified" style="margin-left:6px;">Unverified</span>'}</div>
+          <div class="small-note">${escapeHtml(listing.title || '')} · ${listing.priceInr ? fmtMoney(listing.priceInr) : ''}</div>
+        </div>
+        <div style="display:flex;gap:8px;">
+          ${!existingTx ? `<button class="btn btn-secondary btn-sm" onclick="logTransaction('${convo.listingId}')">Mark trade started</button>` :
+            existingTx.status === 'ACTIVE' ? `<button class="btn btn-primary btn-sm" onclick="completeTransaction('${existingTx.id}')">Mark complete</button>` :
+            `<span class="badge badge-verified">Completed</span>`}
+        </div>
+      </div>
+      <div class="chat-messages" id="chatMsgs"></div>
+      <div class="chat-input">
+        <input id="chatInput" placeholder="Type a message..." onkeydown="if(event.key==='Enter') sendMessage('${convoId}')">
+        <button class="btn btn-primary btn-sm" onclick="sendMessage('${convoId}')">Send</button>
+      </div>
+    `;
+    const msgsEl = document.getElementById('chatMsgs');
+    msgsEl.innerHTML = messages.length ? messages.map(m => (m.flagged ? `<div class="msg-flag">⚠ ${escapeHtml(m.flagReason || 'Flagged by scam engine')}</div>` : '') + msgBubble(m)).join('')
+      : '<div class="small-note" style="text-align:center;margin-top:20px;">No messages yet. Say hello — or try a scam pattern to test live server detection.</div>';
+    msgsEl.scrollTop = msgsEl.scrollHeight;
+  } catch (err) {
+    main.innerHTML = `<div class="empty-chat" style="color:var(--warn);">${escapeHtml(err.message)}</div>`;
+  }
+}
+
+function msgBubble(m) {
+  return `<div class="msg ${m.senderId === CURRENT_USER?.id ? 'mine' : 'theirs'}">${escapeHtml(m.content)}</div>`;
+}
+
+async function sendMessage(convoId) {
+  const input = document.getElementById('chatInput');
+  const text = input.value.trim();
+  if (!text) return;
+
+  // Client-side regex check for instant UI feedback
+  const clientScan = scanMessage(text);
+  if (clientScan.flagged) {
+    toast('⚠ Client warning: matched scam pattern (verifying with server...)');
+  }
+
+  input.value = '';
+  try {
+    const data = await apiFetch(`/conversations/${convoId}/messages`, {
+      method: 'POST',
+      body: { content: text }
+    });
+
+    // Server value wins and updates UI
+    if (data.scanWarning?.flagged) {
+      toast(`⚠ Server Scam Engine Flagged: ${data.scanWarning.reason}`);
+    }
+    openConversation(convoId);
+  } catch (err) {
+    toast(err.message);
+  }
+}
+
+async function logTransaction(listingId) {
+  try {
+    await apiFetch('/transactions', {
+      method: 'POST',
+      body: { listingId }
+    });
+    toast('Trade logged as active');
+    openConversation(ACTIVE_CONVO);
+  } catch (err) {
+    toast(err.message);
+  }
+}
+
+async function completeTransaction(txId) {
+  try {
+    await apiFetch(`/transactions/${txId}/complete`, {
+      method: 'PATCH',
+      body: {}
+    });
+    toast('Marked complete — leave a review from Profile');
+    openConversation(ACTIVE_CONVO);
+  } catch (err) {
+    toast(err.message);
+  }
+}
+
+/* ============ VIEW: PROFILE ============ */
+async function viewProfile(app) {
+  app.innerHTML = `<p>Loading profile...</p>`;
+  try {
+    const [meData, txsData] = await Promise.all([
+      apiFetch('/users/me'),
+      apiFetch('/transactions')
+    ]);
+    CURRENT_USER = meData.user;
+    const score = CURRENT_USER.trustScore || 0;
+    const myTx = txsData.transactions || [];
+    const completedTx = myTx.filter(t => t.status === 'COMPLETED' && (!t.reviews || !t.reviews.find(r => r.reviewerId === CURRENT_USER.id)));
+
+    app.innerHTML = `
+      <p class="section-title rise">${escapeHtml(CURRENT_USER.name)}</p>
+      <p class="section-sub rise">Phone: ${escapeHtml(CURRENT_USER.phone)} · Member since ${fmtDate(CURRENT_USER.createdAt)}</p>
+      <div class="two-col rise rise-d1">
+        <div>
+          <div class="card" style="margin-bottom:20px;">
+            <p style="font-weight:600;margin:0 0 14px;">Verification</p>
+            ${CURRENT_USER.kycStatus === 'VERIFIED' ? `<div class="badge badge-verified verify-pulse" style="margin-bottom:10px;">✓ Verified Account</div><p class="small-note">Identity check + vendor ref confirmed by backend.</p>`
+              : `<p class="small-note" style="margin-bottom:12px;">Verifying unlocks the trust badge on your listings and higher-value chats.</p><button class="btn btn-primary btn-sm" id="kycBtn" onclick="startKyc()">Start verification</button>`}
+          </div>
+          ${completedTx.length ? `<div class="card" style="margin-bottom:20px;"><p style="font-weight:600;margin:0 0 10px;">Leave a review</p>
+            ${completedTx.map(t => {
+              const other = (t.sellerId === CURRENT_USER.id ? t.buyer : t.seller) || {};
+              return `<div style="padding:10px 0;border-bottom:1px solid var(--line);"><div style="font-size:13.5px;margin-bottom:8px;">Trade for <b>${escapeHtml(t.listing?.title || 'Item')}</b> with <b>${escapeHtml(other.name || 'User')}</b></div><div style="display:flex;gap:6px;align-items:center;">${[1,2,3,4,5].map(n=>`<span style="cursor:pointer;font-size:17px;" onclick="submitReview('${t.id}', ${n})">☆</span>`).join('')}<span class="small-note">tap to rate</span></div></div>`;
+            }).join('')}
+          </div>` : ''}
+          <div class="card"><p style="font-weight:600;margin:0 0 10px;">Trade history</p>
+            ${myTx.length ? `<div class="table-scroll"><table><tr><th>Status</th><th>Role</th><th>Amount</th><th>Date</th></tr>${myTx.map(t=>`<tr><td>${t.status}</td><td>${t.sellerId===CURRENT_USER.id?'Seller':'Buyer'}</td><td>${fmtMoney(t.amountInr)}</td><td>${fmtDate(t.createdAt)}</td></tr>`).join('')}</table></div>` : '<p class="small-note">No trades yet.</p>'}
+          </div>
+        </div>
+        <div class="card">
+          <p style="font-weight:600;margin:0 0 4px;">Trust score (Calculated Server-Side)</p>
+          <div class="trust-meter"><b>${score}</b><span class="small-note">/ 100</span></div>
+          <hr class="divider" style="margin:16px 0;">
+          <div class="kv-row"><span>Verified</span><span>${CURRENT_USER.kycStatus === 'VERIFIED' ? 'Yes (+35)' : 'No'}</span></div>
+          <div class="kv-row"><span>Completed trades</span><span>${myTx.filter(t => t.status === 'COMPLETED').length}</span></div>
+          <div class="kv-row"><span>Account Status</span><span>${CURRENT_USER.banned ? 'Banned' : 'Active'}</span></div>
+        </div>
+      </div>
+    `;
+  } catch (err) {
+    app.innerHTML = `<div class="card"><p style="color:var(--warn);">${escapeHtml(err.message)}</p></div>`;
+  }
+}
+
+async function startKyc() {
+  const btn = document.getElementById('kycBtn');
+  if (btn) { btn.disabled = true; btn.textContent = 'Verifying...'; }
+  try {
+    await apiFetch('/kyc/verify', {
+      method: 'POST',
+      body: { idDocumentType: 'PAN', documentNumber: 'ABCDE1234F' }
+    });
+    toast('Identity Verified ✓');
+    viewProfile(document.getElementById('app'));
+  } catch (err) {
+    toast(err.message);
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = 'Start verification'; }
+  }
+}
+
+async function submitReview(txId, rating) {
+  try {
+    await apiFetch('/reviews', {
+      method: 'POST',
+      body: { transactionId: txId, rating, comment: 'Great smooth transaction!' }
+    });
+    toast('Review submitted');
+    viewProfile(document.getElementById('app'));
+  } catch (err) {
+    toast(err.message);
+  }
+}
+
+/* ============ VIEW: ADMIN ============ */
+async function viewAdmin(app) {
+  app.innerHTML = `<p>Loading admin panel...</p>`;
+  try {
+    const [logsData, flaggedData, rulesData] = await Promise.all([
+      apiFetch('/admin/audit-logs'),
+      apiFetch('/admin/flagged-messages'),
+      apiFetch('/admin/scam-rules')
+    ]);
+    const auditLogs = logsData.auditLogs || [];
+    const flagged = flaggedData.flaggedMessages || [];
+    const rules = rulesData.scamRules || [];
+
+    app.innerHTML = `
+      <p class="section-title rise">Moderation &amp; Admin</p>
+      <p class="section-sub rise">Real permissioned admin panel (requires row in admin_roles table).</p>
+      <div class="card rise rise-d1" style="margin-bottom:20px;">
+        <p style="font-weight:600;margin:0 0 10px;">Flagged messages (${flagged.length})</p>
+        ${flagged.length ? `<div class="table-scroll"><table><tr><th>From</th><th>Message</th><th>Reason</th><th>When</th></tr>${flagged.map(m => { const sender = m.sender || {}; return `<tr><td>${escapeHtml(sender.name || 'User')}</td><td style="max-width:220px;">${escapeHtml(m.content)}</td><td style="max-width:260px;">${escapeHtml(m.flagReason)}</td><td>${fmtDate(m.createdAt)}</td></tr>`; }).join('')}</table></div>` : '<p class="small-note">No flagged messages currently.</p>'}
+      </div>
+      <div class="card rise rise-d2" style="margin-bottom:20px;">
+        <p style="font-weight:600;margin:0 0 10px;">Active Scam Detection Rules (${rules.length})</p>
+        <div class="table-scroll"><table><tr><th>Pattern</th><th>Reason</th></tr>
+          ${rules.map(r => `<tr><td><code>${escapeHtml(r.pattern)}</code></td><td>${escapeHtml(r.reason)}</td></tr>`).join('')}
+        </table></div>
+      </div>
+      <div class="card rise rise-d3">
+        <p style="font-weight:600;margin:0 0 10px;">Audit Logs (${auditLogs.length})</p>
+        <div class="table-scroll"><table><tr><th>Actor</th><th>Action</th><th>Target</th><th>Date</th></tr>
+          ${auditLogs.map(l => `<tr><td>${escapeHtml(l.actor?.name || l.actorId)}</td><td><b>${escapeHtml(l.action)}</b></td><td>${escapeHtml(l.targetType)}:${escapeHtml(l.targetId)}</td><td>${fmtDate(l.createdAt)}</td></tr>`).join('')}
+        </table></div>
+      </div>
+    `;
+  } catch (err) {
+    app.innerHTML = `<div class="card"><p style="color:var(--warn);">${escapeHtml(err.message)}</p></div>`;
+  }
+}
+
+/* ============ INIT ============ */
+boot();
+</script>
+</body>
+</html>

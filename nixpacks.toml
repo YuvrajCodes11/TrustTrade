@@ -1,0 +1,8 @@
+[providers]
+providers = ["node"]
+
+[build]
+cmds = ["npm ci", "npx prisma generate", "npx tsc"]
+
+[start]
+cmd = "npx prisma migrate deploy && node dist/index.js"
